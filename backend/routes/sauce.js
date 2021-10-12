@@ -5,12 +5,12 @@ const sauceCtrl = require('../controllers/sauce');
 
 router.post('/', sauceCtrl.createSauce);
   
-  router.put('/:id', sauceCtrl.modifySauce);
+router.put('/:id', sauceCtrl.modifySauce);
   
-  router.delete('/:id', sauceCtrl.deleteSauce );
+router.delete('/:id', sauceCtrl.deleteSauce );
   
-  router.get('/:id', sauceCtrl.getOneSauce)
+router.get('/:id', sauceCtrl.getOneSauce)
   
-  router.get('/', sauceCtrl.getAllSauces );
+router.get('/', sauceCtrl.getAllSauces );
 
-  module.exports = router;
+module.exports = router;
