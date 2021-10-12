@@ -12,12 +12,12 @@ const fs = require('fs');
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
-        userLiked: '',
-        userDisliked: '',
+        userLiked: [' '],
+        userDisliked: [' '],
       });
       sauce.save()
         .then(() => res.status(201).json({message: 'Sauce enregistre'}))
-        .catch(error => res.status(400).json({error}));
+        .catch(error => res.status(400).json({error: 'error CRÉER UNE SAUCE'}));
   };
 
 /// MODIFIER UNE SAUCE
