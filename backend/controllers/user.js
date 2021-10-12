@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 
 exports.signup = (req, res, next) => {
-    console.log("body", req.body);
+    // console.log("body", req.body);
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
