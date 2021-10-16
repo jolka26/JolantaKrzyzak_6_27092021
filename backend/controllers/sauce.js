@@ -5,15 +5,15 @@ const fs = require('fs');
 /// CRÉER UNE SAUCE
     exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-    console.log(sauceObject);
+    // console.log(sauceObject);
     delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
-        userLiked: [' '],
-        userDisliked: [' '],
+        usersLiked: [],
+        usersDisliked: [],
       });
       sauce.save()
         .then(() => res.status(201).json({message: 'Sauce enregistre'}))
@@ -64,6 +64,38 @@ const fs = require('fs');
 
 /// LIKE / DISLIKE UNE SAUCE
 
-//  exports.likeSauce = (req, res, next) => {
+  exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({_id: req.params.id})
+    .then((sauce) => {
 
-//  }
+      //like une sauce
+      if(req.body.like === 1 && !sauce.usersLiked.includes(req.body.userId)) {
+        sauce.usersLiked.push(req.body.userId);
+        sauce.likes++;
+      }
+
+      //dislike une sauce
+      if( req.body.like === -1 && !sauce.usersLiked.includes(req.body.userId)) {
+        sauce.usersDisliked.push(req.body.userId);
+        sauce.dislikes++;
+      }
+
+      // retire like pour cette sauce
+      if(req.body.like === 0) {
+        if(sauce.usersLiked.includes(req.body.userId)) {
+          sauce.usersLiked.pull(req.body.userId);
+          sauce.likes--;
+          //retire dislike pour cette sauce
+        } else if (sauce.usersDisliked.includes(req.body.userId)) {
+          sauce.usersDisliked.pull(req.body.userId);
+          sauce.dislikes--;
+        }
+      }
+
+      sauce.save()
+      .then(() => res.status(200).json({message: message}))
+      .catch((error) => res.status(500).json({error}));
+    });
+}
+
+
