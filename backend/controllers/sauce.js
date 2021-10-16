@@ -16,7 +16,7 @@ const fs = require('fs');
         usersDisliked: [],
       });
       sauce.save()
-        .then(() => res.status(201).json({message: 'Sauce enregistre'}))
+        .then(() => res.status(201).json({message: 'Sauce enregistree'}))
         .catch(error => res.status(400).json({error: 'error CRÉER UNE SAUCE'}));
   };
 
@@ -27,7 +27,7 @@ const fs = require('fs');
         ...JSON.parse(req.body.sauce), 
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`} : { ...req.body}; 
     Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id}) 
-        .then(() => res.status(200).json({message: 'Sauce modifie'}))
+        .then(() => res.status(200).json({message: 'Sauce modifiee'}))
         .catch(error => res.status(400).json({error: 'error MODIFIER UNE SAUCE'})); 
 };
 
@@ -39,7 +39,7 @@ const fs = require('fs');
         const filename = sauce.imageUrl.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: 'Sauce supprime'}))
+            .then(() => res.status(200).json({ message: 'Sauce supprimee'}))
             .catch(error => res.status(400).json({error: 'error SUPPRIMER UNE SAUCE'}));
         });
       })
@@ -68,16 +68,20 @@ const fs = require('fs');
     Sauce.findOne({_id: req.params.id})
     .then((sauce) => {
 
+      let message;
+
       //like une sauce
       if(req.body.like === 1 && !sauce.usersLiked.includes(req.body.userId)) {
         sauce.usersLiked.push(req.body.userId);
         sauce.likes++;
+        message = "like une sauce";
       }
 
       //dislike une sauce
       if( req.body.like === -1 && !sauce.usersLiked.includes(req.body.userId)) {
         sauce.usersDisliked.push(req.body.userId);
         sauce.dislikes++;
+        message = "dislike une sauce";
       }
 
       // retire like pour cette sauce
@@ -85,10 +89,12 @@ const fs = require('fs');
         if(sauce.usersLiked.includes(req.body.userId)) {
           sauce.usersLiked.pull(req.body.userId);
           sauce.likes--;
+          message = "retire like pour cette sauce";
           //retire dislike pour cette sauce
         } else if (sauce.usersDisliked.includes(req.body.userId)) {
           sauce.usersDisliked.pull(req.body.userId);
           sauce.dislikes--;
+          message = "retire dislike pour cette sauce";
         }
       }
 
