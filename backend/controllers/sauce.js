@@ -33,6 +33,7 @@ const fs = require('fs');
                       ...JSON.parse(req.body.sauce),
                       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                   }
+       
                   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                       .then(() => res.status(200).json({ message: 'Sauce modifiee!' }))
                       .catch(error => res.status(400).json({ error }));
@@ -41,7 +42,8 @@ const fs = require('fs');
           .catch(error => res.status(500).json({ error }));
   } else {
       // si l'image n'est pas modifiee
-      const sauceObject = { ...req.body };
+      const sauceObject = { ...req.body.sauce };
+     
       Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
           .then(() => res.status(200).json({ message: 'Sauce modifiee!' }))
           .catch(error => res.status(400).json({ error }));
