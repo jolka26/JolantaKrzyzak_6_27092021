@@ -34,8 +34,8 @@ require('dotenv').config();
                 userId: user._id,
                 token: jwt.sign(
                     { userID: user._id },
-                    // process.env.RANDOM_TOKEN_SECRET,
-                    "RANDOM_TOKEN_SECRET",
+                    process.env.RANDOM_TOKEN_SECRET,
+                    // "RANDOM_TOKEN_SECRET",
                     { expiresIn: '24h'}
                 )
             });
