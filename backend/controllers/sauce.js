@@ -42,7 +42,7 @@ const fs = require('fs');
           .catch(error => res.status(500).json({ error }));
   } else {
       // si l'image n'est pas modifiee
-      const sauceObject = { ...req.body.sauce };
+      const sauceObject = req.body;
      
       Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
           .then(() => res.status(200).json({ message: 'Sauce modifiee!' }))
